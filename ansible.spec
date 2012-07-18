@@ -1,5 +1,5 @@
 Name: ansible
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Minimal SSH command and control
 Version: 0.4.1
 
@@ -46,6 +46,9 @@ cp -v library/* $RPM_BUILD_ROOT/%{_datadir}/ansible/
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Wed Jul 18 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.4.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
 * Tue Jun 12 2012 Tim Bielawa <tbielawa@redhat.com> - 0.4.1-1
 - Release of 0.4.1 (bugfixes)
 
