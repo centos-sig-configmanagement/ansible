@@ -1,10 +1,15 @@
+%if 0%{?rhel} <= 5
+%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
+%endif
+
 Name: ansible
 Release: 1%{?dist}
 Summary: Minimal SSH command and control
-Version: 0.5.1
+Version: 0.6
 
 Group: Development/Libraries
-License: GPLv3+
+License: GPLv3
 Source0: https://github.com/downloads/ansible/ansible/%{name}-%{version}.tar.gz
 Url: http://ansible.github.com
 
@@ -16,11 +21,13 @@ Requires: python-paramiko
 Requires: python-jinja2
 
 %description
+
 Ansible is a radically simple model-driven configuration management,
 multi-node deployment, and remote task execution system. Ansible works
 over SSH and does not require any software or daemons to be installed
 on remote nodes. Extension modules can be written in any language and
 are transferred to managed machines automatically.
+
 
 %prep
 %setup -q
@@ -37,7 +44,11 @@ cp -v docs/man/man1/*.1 $RPM_BUILD_ROOT/%{_mandir}/man1/
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/ansible
 cp -v library/* $RPM_BUILD_ROOT/%{_datadir}/ansible/
 
+%clean
+rm -rf $RPM_BUILD_ROOT
+
 %files
+%defattr(-,root,root)
 %{python_sitelib}/ansible*
 %{_bindir}/ansible*
 %{_datadir}/ansible
@@ -45,21 +56,16 @@ cp -v library/* $RPM_BUILD_ROOT/%{_datadir}/ansible/
 %doc README.md PKG-INFO COPYING
 %doc %{_mandir}/man1/ansible*
 
+
 %changelog
-* Mon Jul 23 2012 Tim Bielawa <tbielawa@redhat.com> - 0.5.1-1
-- Fedora/EPEL release of 0.5.1
+* Mon Aug 6 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.6-0
+- Release of 0.6
 
 * Wed Jul 4 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.5-0
 - Release of 0.5
 
-* Tue Jun 12 2012 Tim Bielawa <tbielawa@redhat.com> - 0.4.1-1
-- Release of 0.4.1 (bugfixes)
-
 * Wed May 23 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.4-0
 - Release of 0.4
-
-* Tue May  1 2012 Tim Bielawa <tbielawa@redhat.com> - 0.3.1-1
-- Release of 0.3.1. Mostly packaging related changes.
 
 * Mon Apr 23 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.3-1
 - Release of 0.3
