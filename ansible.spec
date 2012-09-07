@@ -4,9 +4,9 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 %endif
 
 Name: ansible
-Release: 1%{?dist}
-Summary: Minimal SSH command and control
-Version: 0.6
+Release: 0.git201209061851%{?dist}
+Summary: SSH-based configuration management, deployment, and task execution system
+Version: 0.7
 
 Group: Development/Libraries
 License: GPLv3
@@ -39,6 +39,7 @@ are transferred to managed machines automatically.
 %{__python} setup.py install -O1 --root=$RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/etc/ansible/
 cp examples/hosts $RPM_BUILD_ROOT/etc/ansible/
+cp examples/ansible.cfg $RPM_BUILD_ROOT/etc/ansible/
 mkdir -p $RPM_BUILD_ROOT/%{_mandir}/man1/
 cp -v docs/man/man1/*.1 $RPM_BUILD_ROOT/%{_mandir}/man1/
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/ansible
@@ -55,9 +56,12 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_sysconfdir}/ansible
 %doc README.md PKG-INFO COPYING
 %doc %{_mandir}/man1/ansible*
-
+%doc examples/playbooks
 
 %changelog
+* Thu Aug 6 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.7-0
+- Release of 0.7
+
 * Mon Aug 6 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.6-0
 - Release of 0.6
 
