@@ -4,9 +4,9 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 %endif
 
 Name: ansible
-Release: 0.git201209061851%{?dist}
+Release: 1%{?dist}
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 0.7
+Version: 0.7.1
 
 Group: Development/Libraries
 License: GPLv3
@@ -59,16 +59,19 @@ rm -rf $RPM_BUILD_ROOT
 %doc examples/playbooks
 
 %changelog
-* Thu Aug 6 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.7-0
+* Thu Sep 11 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.7.1-1
+- Release of 0.7.1 (2.4 compat fix)
+
+* Thu Sep 7 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.7-0.git201209061851
 - Release of 0.7
 
-* Mon Aug 6 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.6-0
+* Mon Aug 6 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.6-1
 - Release of 0.6
 
-* Wed Jul 4 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.5-0
+* Wed Jul 4 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.5-1
 - Release of 0.5
 
-* Wed May 23 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.4-0
+* Wed May 23 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.4-1
 - Release of 0.4
 
 * Mon Apr 23 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.3-1
