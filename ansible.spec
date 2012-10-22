@@ -6,7 +6,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Name: ansible
 Release: 1%{?dist}
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 0.7.1
+Version: 0.8
 
 Group: Development/Libraries
 License: GPLv3
@@ -40,8 +40,9 @@ are transferred to managed machines automatically.
 mkdir -p $RPM_BUILD_ROOT/etc/ansible/
 cp examples/hosts $RPM_BUILD_ROOT/etc/ansible/
 cp examples/ansible.cfg $RPM_BUILD_ROOT/etc/ansible/
-mkdir -p $RPM_BUILD_ROOT/%{_mandir}/man1/
+mkdir -p $RPM_BUILD_ROOT/%{_mandir}/{man1,man3}/
 cp -v docs/man/man1/*.1 $RPM_BUILD_ROOT/%{_mandir}/man1/
+cp -v docs/man/man3/*.3 $RPM_BUILD_ROOT/%{_mandir}/man3/
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/ansible
 cp -v library/* $RPM_BUILD_ROOT/%{_datadir}/ansible/
 
@@ -56,22 +57,23 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_sysconfdir}/ansible
 %doc README.md PKG-INFO COPYING
 %doc %{_mandir}/man1/ansible*
+%doc %{_mandir}/man3/ansible.*
 %doc examples/playbooks
 
 %changelog
-* Thu Sep 11 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.7.1-1
-- Release of 0.7.1 (2.4 compat fix)
+* Fri Oct 19 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.8-0
+- Release of 0.8
 
-* Thu Sep 7 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.7-0.git201209061851
+* Thu Aug 6 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.7-0
 - Release of 0.7
 
-* Mon Aug 6 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.6-1
+* Mon Aug 6 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.6-0
 - Release of 0.6
 
-* Wed Jul 4 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.5-1
+* Wed Jul 4 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.5-0
 - Release of 0.5
 
-* Wed May 23 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.4-1
+* Wed May 23 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.4-0
 - Release of 0.4
 
 * Mon Apr 23 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.3-1
