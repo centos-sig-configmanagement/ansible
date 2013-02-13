@@ -4,7 +4,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 %endif
 
 Name: ansible
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: SSH-based configuration management, deployment, and task execution system
 Version: 0.9
 
@@ -97,6 +97,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.md PKG-INFO COPYING
 
 %changelog
+* Wed Feb 13 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
 * Fri Nov 30 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.9-0
 - Release 0.9
 
