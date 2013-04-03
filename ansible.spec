@@ -6,12 +6,12 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Name: ansible
 Release: 1%{?dist}
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 1.0
+Version: 1.1
 
 Group: Development/Libraries
 License: GPLv3
-Source0: https://github.com/downloads/ansible/ansible/%{name}-%{version}.tar.gz
-Url: http://ansible.github.com
+Source0: http://ansible.cc/releases/%{name}-%{version}.tar.gz
+Url: http://ansible.cc
 
 BuildArch: noarch
 BuildRequires: python2-devel
@@ -97,8 +97,14 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.md PKG-INFO COPYING
 
 %changelog
-* Fri Feb 1 2013 Michael DeHaan <michael.dehaan@gmail.com> - 1.0-0
-- Release 1.0
+* Tue Apr 02 2013 Kevin Fenzi <kevin@scrye.com> 1.1-1
+- Update to 1.1
+
+* Mon Mar 18 2013 Kevin Fenzi <kevin@scrye.com> 1.0-1
+- Update to 1.0
+
+* Wed Feb 13 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
 * Fri Nov 30 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.9-0
 - Release 0.9
