@@ -6,12 +6,12 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Name: ansible
 Release: 1%{?dist}
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 1.1
+Version: 1.2
 
 Group: Development/Libraries
 License: GPLv3
-Source0: http://ansible.cc/releases/%{name}-%{version}.tar.gz
-Url: http://ansible.cc
+Source0: http://ansibleworks.com/releases/%{name}-%{version}.tar.gz
+Url: http://ansibleworks.com
 
 BuildArch: noarch
 BuildRequires: python2-devel
@@ -68,7 +68,7 @@ mkdir -p $RPM_BUILD_ROOT/%{_mandir}/{man1,man3}/
 cp -v docs/man/man1/*.1 $RPM_BUILD_ROOT/%{_mandir}/man1/
 cp -v docs/man/man3/*.3 $RPM_BUILD_ROOT/%{_mandir}/man3/
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/ansible
-cp -v library/* $RPM_BUILD_ROOT/%{_datadir}/ansible/
+cp -va library/* $RPM_BUILD_ROOT/%{_datadir}/ansible/
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -77,26 +77,26 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %{python_sitelib}/ansible*
 %{_bindir}/ansible*
-%dir %{_datadir}/ansible
-%{_datadir}/ansible/[a-eg-z]*
-%{_datadir}/ansible/f[a-hj-z]*
-%{_datadir}/ansible/file
+%{_datadir}/ansible
+%exclude %{_datadir}/ansible/utilities/fireball
+%exclude %{_mandir}/man3/ansible.fireball.*
 %config(noreplace) %{_sysconfdir}/ansible
 %doc README.md PKG-INFO COPYING
 %doc %{_mandir}/man1/ansible*
-%doc %{_mandir}/man3/ansible.[a-eg-z]*
-%doc %{_mandir}/man3/ansible.f[a-hj-z]*
-%doc %{_mandir}/man3/ansible.file*
+%doc %{_mandir}/man3/ansible*
 %doc examples/playbooks
 
 %files fireball
-%{_datadir}/ansible/fireball
+%{_datadir}/ansible/utilities/fireball
 %doc %{_mandir}/man3/ansible.fireball.*
 
 %files node-fireball
 %doc README.md PKG-INFO COPYING
 
 %changelog
+* Mon Jun 10 2013 Kevin Fenzi <kevin@scrye.com> 1.2-1
+- Update to 1.2
+
 * Tue Apr 02 2013 Kevin Fenzi <kevin@scrye.com> 1.1-1
 - Update to 1.1
 
