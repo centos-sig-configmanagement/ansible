@@ -4,9 +4,9 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 %endif
 
 Name: ansible
-Release: 2%{?dist}
+Release: 1%{?dist}
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 1.2.1
+Version: 1.2.2
 
 Group: Development/Libraries
 License: GPLv3
@@ -94,6 +94,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.md PKG-INFO COPYING
 
 %changelog
+* Sat Jul 06 2013 Kevin Fenzi <kevin@scrye.com> 1.2.2-1
+- Update to 1.2.2 with minor fixes
+
 * Fri Jul 05 2013 Kevin Fenzi <kevin@scrye.com> 1.2.1-2
 - Update to newer upstream re-release to fix a syntax error
 
@@ -119,7 +122,7 @@ rm -rf $RPM_BUILD_ROOT
 * Fri Oct 19 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.8-0
 - Release of 0.8
 
-* Thu Aug 6 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.7-0
+* Thu Aug 9 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.7-0
 - Release of 0.7
 
 * Mon Aug 6 2012 Michael DeHaan <michael.dehaan@gmail.com> - 0.6-0
