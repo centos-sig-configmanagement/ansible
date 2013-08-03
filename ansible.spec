@@ -4,7 +4,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 %endif
 
 Name: ansible
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: SSH-based configuration management, deployment, and task execution system
 Version: 1.2.2
 
@@ -94,6 +94,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.md PKG-INFO COPYING
 
 %changelog
+* Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2.2-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
 * Sat Jul 06 2013 Kevin Fenzi <kevin@scrye.com> 1.2.2-1
 - Update to 1.2.2 with minor fixes
 
