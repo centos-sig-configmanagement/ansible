@@ -4,9 +4,9 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 %endif
 
 Name: ansible
-Release: 2%{?dist}
+Release: 1%{?dist}
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 1.2.3
+Version: 1.3.0
 
 Group: Development/Libraries
 License: GPLv3
@@ -19,6 +19,15 @@ BuildRequires: python2-devel
 Requires: PyYAML
 Requires: python-paramiko
 Requires: python-jinja2
+Requires: python-keyczar
+
+# 
+# This is needed to update the old ansible-firewall package that is no 
+# longer needed. Note that you should also remove ansible-node-firewall manually
+# Where you still have it installed. 
+#
+Provides: ansible-fireball = %{version}-%{release}
+Obsoletes: ansible-fireball < 1.2.4
 
 %description
 
@@ -27,31 +36,6 @@ multi-node deployment, and remote task execution system. Ansible works
 over SSH and does not require any software or daemons to be installed
 on remote nodes. Extension modules can be written in any language and
 are transferred to managed machines automatically.
-
-%package fireball
-Summary: Ansible fireball transport support
-Group: Development/Libraries
-Requires: %{name} = %{version}-%{release}
-Requires: python-keyczar
-Requires: python-zmq
-
-%description fireball
-
-Ansible can optionally use a 0MQ based transport mechanism, which is
-considerably faster than the standard ssh mechanism when there are
-multiple actions, but requires additional supporting packages.
-
-%package node-fireball
-Summary: Ansible fireball transport - node end support
-Group: Development/Libraries
-Requires: python-keyczar
-Requires: python-zmq
-
-%description node-fireball
-
-Ansible can optionally use a 0MQ based transport mechanism, which has
-additional requirements for nodes to use.  This package includes those
-requirements.
 
 %prep
 %setup -q
@@ -86,14 +70,13 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man3/ansible*
 %doc examples/playbooks
 
-%files fireball
-%{_datadir}/ansible/utilities/fireball
-%doc %{_mandir}/man3/ansible.fireball.*
-
-%files node-fireball
-%doc README.md PKG-INFO COPYING
-
 %changelog
+* Thu Sep 12 2013 Kevin Fenzi <kevin@scrye.com> 1.3.0-1
+- Update to 1.3.0
+- Drop node-fireball subpackage entirely.
+- Obsolete/provide fireball subpackage. 
+- Add Requires python-keyczar on main package for accelerated mode.
+
 * Wed Aug 21 2013 Kevin Fenzi <kevin@scrye.com> 1.2.3-2
 - Update to 1.2.3
 - Fixes CVE-2013-4260 and CVE-2013-4259
