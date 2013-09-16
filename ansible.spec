@@ -1,12 +1,16 @@
+%if 0%{?rhel} == 5
+%define __python /usr/bin/python26
+%endif
+
 %if 0%{?rhel} <= 5
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 %endif
 
 Name: ansible
-Release: 1%{?dist}
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 1.3.0
+Version: 1.3.1
+Release: 1%{?dist}
 
 Group: Development/Libraries
 License: GPLv3
@@ -14,12 +18,21 @@ Source0: http://ansibleworks.com/releases/%{name}-%{version}.tar.gz
 Url: http://ansibleworks.com
 
 BuildArch: noarch
+%if 0%{?rhel} && 0%{?rhel} <= 5
+BuildRequires: python26-devel
+
+Requires: python26-PyYAML
+Requires: python26-paramiko
+Requires: python26-jinja2
+Requires: python26-keyczar
+%else
 BuildRequires: python2-devel
 
 Requires: PyYAML
 Requires: python-paramiko
 Requires: python-jinja2
 Requires: python-keyczar
+%endif
 
 # 
 # This is needed to update the old ansible-firewall package that is no 
@@ -71,6 +84,13 @@ rm -rf $RPM_BUILD_ROOT
 %doc examples/playbooks
 
 %changelog
+* Mon Sep 16 2013 Kevin Fenzi <kevin@scrye.com> 1.3.1-1
+- Update to 1.3.1
+
+* Sat Sep 14 2013 Kevin Fenzi <kevin@scrye.com> 1.3.0-2
+- Merge upstream spec changes to support EPEL5
+- (Still needs python26-keyczar and deps added to EPEL)
+
 * Thu Sep 12 2013 Kevin Fenzi <kevin@scrye.com> 1.3.0-1
 - Update to 1.3.0
 - Drop node-fireball subpackage entirely.
