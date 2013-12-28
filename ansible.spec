@@ -9,7 +9,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 1.4.1
+Version: 1.4.3
 Release: 1%{?dist}
 
 Group: Development/Libraries
@@ -25,6 +25,7 @@ Requires: python26-PyYAML
 Requires: python26-paramiko
 Requires: python26-jinja2
 Requires: python26-keyczar
+Requires: python26-httplib2
 %else
 BuildRequires: python2-devel
 
@@ -32,6 +33,7 @@ Requires: PyYAML
 Requires: python-paramiko
 Requires: python-jinja2
 Requires: python-keyczar
+Requires: python-httplib2
 %endif
 
 # 
@@ -84,6 +86,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc examples/playbooks
 
 %changelog
+* Sat Dec 28 2013 Kevin Fenzi <kevin@scrye.com> 1.4.3-1
+- Update to 1.4.3 with ansible galaxy commands.
+- Adds python-httplib2 to requires
+
 * Wed Nov 27 2013 Kevin Fenzi <kevin@scrye.com> 1.4.1-1
 - Update to upstream 1.4.1 bugfix release
 
