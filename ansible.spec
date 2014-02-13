@@ -9,13 +9,13 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 1.4.3
+Version: 1.4.5
 Release: 1%{?dist}
 
 Group: Development/Libraries
 License: GPLv3
-Source0: http://ansibleworks.com/releases/%{name}-%{version}.tar.gz
-Url: http://ansibleworks.com
+Source0: http://releases.ansible.com/ansible/%{name}-%{version}.tar.gz
+Url: http://ansible.com
 
 BuildArch: noarch
 %if 0%{?rhel} && 0%{?rhel} <= 5
@@ -86,6 +86,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc examples/playbooks
 
 %changelog
+* Wed Feb 12 2014 Kevin Fenzi <kevin@scrye.com> 1.4.5-1
+- Update to 1.4.5
+
 * Sat Dec 28 2013 Kevin Fenzi <kevin@scrye.com> 1.4.3-1
 - Update to 1.4.3 with ansible galaxy commands.
 - Adds python-httplib2 to requires
