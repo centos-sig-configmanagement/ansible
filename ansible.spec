@@ -9,7 +9,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 1.4.5
+Version: 1.5
 Release: 1%{?dist}
 
 Group: Development/Libraries
@@ -63,9 +63,8 @@ are transferred to managed machines automatically.
 mkdir -p $RPM_BUILD_ROOT/etc/ansible/
 cp examples/hosts $RPM_BUILD_ROOT/etc/ansible/
 cp examples/ansible.cfg $RPM_BUILD_ROOT/etc/ansible/
-mkdir -p $RPM_BUILD_ROOT/%{_mandir}/{man1,man3}/
+mkdir -p $RPM_BUILD_ROOT/%{_mandir}/man1
 cp -v docs/man/man1/*.1 $RPM_BUILD_ROOT/%{_mandir}/man1/
-cp -v docs/man/man3/*.3 $RPM_BUILD_ROOT/%{_mandir}/man3/
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/ansible
 cp -va library/* $RPM_BUILD_ROOT/%{_datadir}/ansible/
 
@@ -77,15 +76,15 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/ansible*
 %{_bindir}/ansible*
 %{_datadir}/ansible
-%exclude %{_datadir}/ansible/utilities/fireball
-%exclude %{_mandir}/man3/ansible.fireball.*
 %config(noreplace) %{_sysconfdir}/ansible
 %doc README.md PKG-INFO COPYING
 %doc %{_mandir}/man1/ansible*
-%doc %{_mandir}/man3/ansible*
 %doc examples/playbooks
 
 %changelog
+* Fri Feb 28 2014 Kevin Fenzi <kevin@scrye.com> 1.5-1
+- Update to 1.5
+
 * Wed Feb 12 2014 Kevin Fenzi <kevin@scrye.com> 1.4.5-1
 - Update to 1.4.5
 
