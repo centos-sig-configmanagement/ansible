@@ -9,7 +9,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 1.5.1
+Version: 1.5.2
 Release: 1%{?dist}
 
 Group: Development/Libraries
@@ -82,6 +82,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc examples/playbooks
 
 %changelog
+* Tue Mar 11 2014 Kevin Fenzi <kevin@scrye.com> 1.5.2-1
+- Update to 1.5.2
+
 * Mon Mar 10 2014 Kevin Fenzi <kevin@scrye.com> 1.5.1-1
 - Update to 1.5.1
 
