@@ -9,12 +9,15 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 1.5
+Version: 1.5.3
 Release: 1%{?dist}
 
 Group: Development/Libraries
 License: GPLv3
 Source0: http://releases.ansible.com/ansible/%{name}-%{version}.tar.gz
+# Patch to make ansible-vault use the forward-compat python-crypto2.6 package
+# Upstreamed here: https://github.com/ansible/ansible/pull/6498
+Patch0: 0001-Use-setuptools-to-get-a-recent-enough-version-of-pyt.patch
 Url: http://ansible.com
 
 BuildArch: noarch
@@ -36,6 +39,15 @@ Requires: python-keyczar
 Requires: python-httplib2
 %endif
 
+%if 0%{?rhel} == 6
+# RHEL 6 needs a newer version of the pycrypto library for the ansible-vault
+# command.  Note: If other pieces of ansible also grow to need pycrypto you may
+# need to add: Requires: python-crypto or patch the other pieces of ansible to
+# make use of this forward compat package (see the patch for ansible-vault
+# above to see what needs to be done.)
+Requires: python-crypto2.6
+%endif
+
 # 
 # This is needed to update the old ansible-firewall package that is no 
 # longer needed. Note that you should also remove ansible-node-firewall manually
@@ -55,11 +67,16 @@ are transferred to managed machines automatically.
 %prep
 %setup -q
 
+%if 0%{?rhel} == 6
+# Patch to make ansible-vault use a newer pycrypto forward-compat package
+%patch0 -p1
+%endif
+
 %build
 %{__python} setup.py build
 
 %install
-%{__python} setup.py install -O1 --root=$RPM_BUILD_ROOT
+%{__python} setup.py install --root=$RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/etc/ansible/
 cp examples/hosts $RPM_BUILD_ROOT/etc/ansible/
 cp examples/ansible.cfg $RPM_BUILD_ROOT/etc/ansible/
@@ -82,6 +99,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc examples/playbooks
 
 %changelog
+* Wed Mar 12 2014 Toshio Kuratomi <toshio@fedoraproject.org> - 1.5.3-1
+- Fix ansible-vault for newer python-crypto dependency
+
 * Fri Feb 28 2014 Kevin Fenzi <kevin@scrye.com> 1.5-1
 - Update to 1.5
 

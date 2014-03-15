@@ -1,0 +1,56 @@
+From 02519a2a77e7d88c32fb3f3b4db7c6cb20da7006 Mon Sep 17 00:00:00 2001
+From: Toshio Kuratomi <toshio@fedoraproject.org>
+Date: Fri, 14 Mar 2014 13:16:04 -0700
+Subject: [PATCH] Use setuptools to get a recent enough version of
+ python-crypto2.6
+
+---
+ bin/ansible-playbook | 3 +++
+ bin/ansible-vault    | 3 +++
+ setup.py             | 2 +-
+ 3 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/bin/ansible-playbook b/bin/ansible-playbook
+index 5aa020a..a8ada00 100755
+--- a/bin/ansible-playbook
++++ b/bin/ansible-playbook
+@@ -18,6 +18,9 @@
+ 
+ #######################################################
+ 
++__requires__ = ['pycrypto >= 2.6']
++import pkg_resources
++
+ import sys
+ import os
+ import stat
+diff --git a/bin/ansible-vault b/bin/ansible-vault
+index 2c8094d..b0a9926 100755
+--- a/bin/ansible-vault
++++ b/bin/ansible-vault
+@@ -20,6 +20,9 @@
+ # example playbook to bootstrap this script in the examples/ dir which
+ # installs ansible and sets it up to run on cron.
+ 
++__requires__ = ['pycrypto >= 2.6']
++import pkg_resources
++
+ import os
+ import sys
+ import traceback
+diff --git a/setup.py b/setup.py
+index c537ee9..34425e1 100644
+--- a/setup.py
++++ b/setup.py
+@@ -29,7 +29,7 @@ setup(name='ansible',
+       author_email='michael@ansible.com',
+       url='http://ansible.com/',
+       license='GPLv3',
+-      install_requires=['paramiko', 'jinja2', "PyYAML"],
++      install_requires=['paramiko', 'jinja2', "PyYAML", 'setuptools', 'pycrypto >= 2.6'],
+       package_dir={ 'ansible': 'lib/ansible' },
+       packages=[
+          'ansible',
+-- 
+1.8.5.3
+
