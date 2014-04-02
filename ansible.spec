@@ -9,8 +9,8 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 1.5.3
-Release: 3%{?dist}
+Version: 1.5.4
+Release: 1%{?dist}
 
 Group: Development/Libraries
 License: GPLv3
@@ -103,20 +103,19 @@ rm -rf $RPM_BUILD_ROOT
 %doc examples/playbooks
 
 %changelog
-* Wed Apr  2 2014 Toshio Kuratomi <toshio@fedoraproject.org> - 1.5.3-3
-- Add missing dependency on python-setuptools
+* Wed Apr  2 2014 Toshio Kuratomi <toshio@fedoraproject.org> - 1.5.4-1
+- Update to 1.5.4
 
 * Fri Mar 14 2014 Kevin Fenzi <kevin@scrye.com> 1.5.3-2
 - Update to NEW 1.5.3 upstream release.
+- Add missing dependency on python-setuptools (el6 build)
 
 * Thu Mar 13 2014 Kevin Fenzi <kevin@scrye.com> 1.5.3-1
 - Update to 1.5.3
+- Fix ansible-vault for newer python-crypto dependency (el6 build)
 
 * Tue Mar 11 2014 Kevin Fenzi <kevin@scrye.com> 1.5.2-2
 - Update to redone 1.5.2 release
-
-* Wed Mar 12 2014 Toshio Kuratomi <toshio@fedoraproject.org> - 1.5.3-1
-- Fix ansible-vault for newer python-crypto dependency
 
 * Tue Mar 11 2014 Kevin Fenzi <kevin@scrye.com> 1.5.2-1
 - Update to 1.5.2
