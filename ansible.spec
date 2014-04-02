@@ -10,7 +10,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
 Version: 1.5.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 Group: Development/Libraries
 License: GPLv3
@@ -29,6 +29,10 @@ Requires: python26-paramiko
 Requires: python26-jinja2
 Requires: python26-keyczar
 Requires: python26-httplib2
+
+# This may become a Requires on all versions with the next upstream release as
+# the patch is looking like it will be accepted upstream.
+Requires: python-setuptools
 %else
 BuildRequires: python2-devel
 
@@ -99,6 +103,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc examples/playbooks
 
 %changelog
+* Wed Apr  2 2014 Toshio Kuratomi <toshio@fedoraproject.org> - 1.5.3-2
+- Add missing dependency on python-setuptools
+
 * Wed Mar 12 2014 Toshio Kuratomi <toshio@fedoraproject.org> - 1.5.3-1
 - Fix ansible-vault for newer python-crypto dependency
 
