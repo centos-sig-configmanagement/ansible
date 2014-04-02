@@ -18,6 +18,10 @@ Source0: http://releases.ansible.com/ansible/%{name}-%{version}.tar.gz
 # Patch to make ansible-vault use the forward-compat python-crypto2.6 package
 # Upstreamed here: https://github.com/ansible/ansible/pull/6498
 Patch0: 0001-Use-setuptools-to-get-a-recent-enough-version-of-pyt.patch
+# Patch to fix accelerate with rawhide
+# https://github.com/ansible/ansible/commit/0556c53f7878c9ac2a59100c2752785482e806aa.patch
+# https://github.com/ansible/ansible/issues/6447
+Patch1: 0556c53f7878c9ac2a59100c2752785482e806aa.patch
 Url: http://ansible.com
 
 BuildArch: noarch
@@ -75,6 +79,8 @@ are transferred to managed machines automatically.
 # Patch to make ansible-vault use a newer pycrypto forward-compat package
 %patch0 -p1
 %endif
+# Patch to fix accelerator mode
+%patch1 -p1
 
 %build
 %{__python} setup.py build
@@ -105,6 +111,8 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Wed Apr  2 2014 Toshio Kuratomi <toshio@fedoraproject.org> - 1.5.4-1
 - Update to 1.5.4
+- Add upstream patch to fix accelerator mode
+- Merge fedora and el6 spec files
 
 * Fri Mar 14 2014 Kevin Fenzi <kevin@scrye.com> 1.5.3-2
 - Update to NEW 1.5.3 upstream release.
