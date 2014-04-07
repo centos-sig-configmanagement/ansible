@@ -10,7 +10,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
 Version: 1.5.4
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 Group: Development/Libraries
 License: GPLv3
@@ -33,10 +33,6 @@ Requires: python26-paramiko
 Requires: python26-jinja2
 Requires: python26-keyczar
 Requires: python26-httplib2
-
-# This may become a Requires on all versions with the next upstream release as
-# the patch is looking like it will be accepted upstream.
-Requires: python-setuptools
 %else
 BuildRequires: python2-devel
 
@@ -54,6 +50,11 @@ Requires: python-httplib2
 # make use of this forward compat package (see the patch for ansible-vault
 # above to see what needs to be done.)
 Requires: python-crypto2.6
+
+# This may become a Requires on all versions with the next upstream release as
+# the patch is looking like it will be accepted upstream.
+# https://github.com/ansible/ansible/pull/6497
+Requires: python-setuptools
 %endif
 
 # 
@@ -109,6 +110,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc examples/playbooks
 
 %changelog
+* Mon Apr  7 2014 Toshio Kuratomi <toshio@fedoraproject.org> - 1.5.4-2
+- Fix setuptools requirement to apply to rhel=6, not rhel<6
+
 * Wed Apr  2 2014 Toshio Kuratomi <toshio@fedoraproject.org> - 1.5.4-1
 - Update to 1.5.4
 - Add upstream patch to fix accelerator mode
