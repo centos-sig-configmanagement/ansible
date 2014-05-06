@@ -9,7 +9,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 1.5.5
+Version: 1.6
 Release: 1%{?dist}
 
 Group: Development/Libraries
@@ -18,10 +18,6 @@ Source0: http://releases.ansible.com/ansible/%{name}-%{version}.tar.gz
 # Patch to make ansible-vault use the forward-compat python-crypto2.6 package
 # Upstreamed here: https://github.com/ansible/ansible/pull/6498
 Patch0: 0001-Use-setuptools-to-get-a-recent-enough-version-of-pyt.patch
-# Patch to fix accelerate with rawhide
-# https://github.com/ansible/ansible/commit/0556c53f7878c9ac2a59100c2752785482e806aa.patch
-# https://github.com/ansible/ansible/issues/6447
-Patch1: 0556c53f7878c9ac2a59100c2752785482e806aa.patch
 Url: http://ansible.com
 
 BuildArch: noarch
@@ -35,12 +31,14 @@ Requires: python26-keyczar
 Requires: python26-httplib2
 %else
 BuildRequires: python2-devel
+BuildRequires: python-setuptools
 
 Requires: PyYAML
 Requires: python-paramiko
 Requires: python-jinja2
 Requires: python-keyczar
 Requires: python-httplib2
+Requires: python-setuptools
 %endif
 
 %if 0%{?rhel} == 6
@@ -50,11 +48,6 @@ Requires: python-httplib2
 # make use of this forward compat package (see the patch for ansible-vault
 # above to see what needs to be done.)
 Requires: python-crypto2.6
-
-# This may become a Requires on all versions with the next upstream release as
-# the patch is looking like it will be accepted upstream.
-# https://github.com/ansible/ansible/pull/6497
-Requires: python-setuptools
 %endif
 
 # 
@@ -80,8 +73,6 @@ are transferred to managed machines automatically.
 # Patch to make ansible-vault use a newer pycrypto forward-compat package
 %patch0 -p1
 %endif
-# Patch to fix accelerator mode
-%patch1 -p1
 
 %build
 %{__python} setup.py build
@@ -110,6 +101,11 @@ rm -rf $RPM_BUILD_ROOT
 %doc examples/playbooks
 
 %changelog
+* Mon May  5 2014 Toshio Kuratomi <toshio@fedoraproject.org> - 1.6-1
+- Update to 1.6
+- Drop accelerate fix, merged upstream
+- Refresh RHEL6 pycrypto patch.  It was half-merged upstream.
+
 * Fri Apr 18 2014 Kevin Fenzi <kevin@scrye.com> 1.5.5-1
 - Update to 1.5.5
 
