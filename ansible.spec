@@ -9,8 +9,8 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 1.6.2
-Release: 2%{?dist}
+Version: 1.6.3
+Release: 1%{?dist}
 
 Group: Development/Libraries
 License: GPLv3
@@ -101,6 +101,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc examples/playbooks
 
 %changelog
+* Mon Jun 09 2014 Kevin Fenzi <kevin@scrye.com> 1.6.3-1
+- Update to 1.6.3
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.6.2-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
