@@ -9,7 +9,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 1.6.7
+Version: 1.6.8
 Release: 1%{?dist}
 
 Group: Development/Libraries
@@ -101,6 +101,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc examples/playbooks
 
 %changelog
+* Tue Jul 22 2014 Kevin Fenzi <kevin@scrye.com> 1.6.8-1
+- Update to 1.6.8 with fixes for shell quoting from previous release. 
+- Fixes bugs #1122060 #1122061 #1122062
+
 * Mon Jul 21 2014 Kevin Fenzi <kevin@scrye.com> 1.6.7-1
 - Update to 1.6.7
 - Fixes CVE-2014-4966 and CVE-2014-4967
