@@ -10,7 +10,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
 Version: 1.7.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 Group: Development/Libraries
 License: GPLv3
@@ -101,6 +101,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc examples/playbooks
 
 %changelog
+* Thu Oct  9 2014 Toshio Kuratomi <toshio@fedoraproject.org> - 1.7.2-2
+- Add /usr/bin/ansible to the rhel6 newer pycrypto patch
+
 * Wed Sep 24 2014 Kevin Fenzi <kevin@scrye.com> 1.7.2-1
 - Update to 1.7.2
 
