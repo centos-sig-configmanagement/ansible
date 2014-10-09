@@ -1,7 +1,7 @@
-Index: ansible-1.6/bin/ansible-playbook
+Index: ansible-1.7.2/bin/ansible-playbook
 ===================================================================
---- ansible-1.6.orig/bin/ansible-playbook
-+++ ansible-1.6/bin/ansible-playbook
+--- ansible-1.7.2.orig/bin/ansible-playbook
++++ ansible-1.7.2/bin/ansible-playbook
 @@ -18,8 +18,8 @@
  
  #######################################################
@@ -13,10 +13,10 @@ Index: ansible-1.6/bin/ansible-playbook
  
  import sys
  import os
-Index: ansible-1.6/bin/ansible-vault
+Index: ansible-1.7.2/bin/ansible-vault
 ===================================================================
---- ansible-1.6.orig/bin/ansible-vault
-+++ ansible-1.6/bin/ansible-vault
+--- ansible-1.7.2.orig/bin/ansible-vault
++++ ansible-1.7.2/bin/ansible-vault
 @@ -20,8 +20,8 @@
  # example playbook to bootstrap this script in the examples/ dir which
  # installs ansible and sets it up to run on cron.
@@ -28,3 +28,17 @@ Index: ansible-1.6/bin/ansible-vault
  
  import os
  import sys
+Index: ansible-1.7.2/bin/ansible
+===================================================================
+--- ansible-1.7.2.orig/bin/ansible
++++ ansible-1.7.2/bin/ansible
+@@ -19,6 +19,9 @@
+ 
+ ########################################################
+ 
++__requires__ = ['ansible']
++import pkg_resources
++
+ import os
+ import sys
+ 
