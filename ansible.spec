@@ -9,8 +9,8 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 1.7.2
-Release: 2%{?dist}
+Version: 1.8
+Release: 1%{?dist}
 
 Group: Development/Libraries
 License: GPLv3
@@ -85,7 +85,6 @@ cp examples/ansible.cfg $RPM_BUILD_ROOT/etc/ansible/
 mkdir -p $RPM_BUILD_ROOT/%{_mandir}/man1
 cp -v docs/man/man1/*.1 $RPM_BUILD_ROOT/%{_mandir}/man1/
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/ansible
-cp -va library/* $RPM_BUILD_ROOT/%{_datadir}/ansible/
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -98,9 +97,11 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_sysconfdir}/ansible
 %doc README.md PKG-INFO COPYING
 %doc %{_mandir}/man1/ansible*
-%doc examples/playbooks
 
 %changelog
+* Tue Nov 25 2014 Kevin Fenzi <kevin@scrye.com> 1.8-1
+- Update to 1.8
+
 * Thu Oct  9 2014 Toshio Kuratomi <toshio@fedoraproject.org> - 1.7.2-2
 - Add /usr/bin/ansible to the rhel6 newer pycrypto patch
 
