@@ -1,7 +1,18 @@
-Index: ansible-1.7.2/bin/ansible-playbook
-===================================================================
---- ansible-1.7.2.orig/bin/ansible-playbook
-+++ ansible-1.7.2/bin/ansible-playbook
+diff -Nur ansible-1.8.orig/bin/ansible ansible-1.8/bin/ansible
+--- ansible-1.8.orig/bin/ansible	2014-11-25 15:43:06.000000000 -0700
++++ ansible-1.8/bin/ansible	2014-11-25 17:07:30.183061715 -0700
+@@ -18,6 +18,8 @@
+ # along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ ########################################################
++__requires__ = ['ansible']
++import pkg_resources
+ 
+ import os
+ import sys
+diff -Nur ansible-1.8.orig/bin/ansible-playbook ansible-1.8/bin/ansible-playbook
+--- ansible-1.8.orig/bin/ansible-playbook	2014-11-25 15:43:06.000000000 -0700
++++ ansible-1.8/bin/ansible-playbook	2014-11-25 17:07:34.694979702 -0700
 @@ -18,8 +18,8 @@
  
  #######################################################
@@ -13,13 +24,12 @@ Index: ansible-1.7.2/bin/ansible-playbook
  
  import sys
  import os
-Index: ansible-1.7.2/bin/ansible-vault
-===================================================================
---- ansible-1.7.2.orig/bin/ansible-vault
-+++ ansible-1.7.2/bin/ansible-vault
-@@ -20,8 +20,8 @@
- # example playbook to bootstrap this script in the examples/ dir which
- # installs ansible and sets it up to run on cron.
+diff -Nur ansible-1.8.orig/bin/ansible-vault ansible-1.8/bin/ansible-vault
+--- ansible-1.8.orig/bin/ansible-vault	2014-11-25 15:43:06.000000000 -0700
++++ ansible-1.8/bin/ansible-vault	2014-11-25 17:06:50.668779958 -0700
+@@ -18,8 +18,8 @@
+ # ansible-vault is a script that encrypts/decrypts YAML files. See
+ # http://docs.ansible.com/playbooks_vault.html for more details.
  
 -#__requires__ = ['ansible']
 -#import pkg_resources
@@ -28,17 +38,3 @@ Index: ansible-1.7.2/bin/ansible-vault
  
  import os
  import sys
-Index: ansible-1.7.2/bin/ansible
-===================================================================
---- ansible-1.7.2.orig/bin/ansible
-+++ ansible-1.7.2/bin/ansible
-@@ -19,6 +19,9 @@
- 
- ########################################################
- 
-+__requires__ = ['ansible']
-+import pkg_resources
-+
- import os
- import sys
- 

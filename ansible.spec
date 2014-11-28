@@ -9,7 +9,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 1.8
+Version: 1.8.1
 Release: 1%{?dist}
 
 Group: Development/Libraries
@@ -99,6 +99,12 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Thu Nov 27 2014 Kevin Fenzi <kevin@scrye.com> 1.8.1-1
+- Update to 1.8.1
+
+* Tue Nov 25 2014 Kevin Fenzi <kevin@scrye.com> 1.8-2
+- Rebase el6 patch
+
 * Tue Nov 25 2014 Kevin Fenzi <kevin@scrye.com> 1.8-1
 - Update to 1.8
 
