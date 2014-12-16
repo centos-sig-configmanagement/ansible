@@ -10,7 +10,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
 Version: 1.8.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 Group: Development/Libraries
 License: GPLv3
@@ -80,11 +80,14 @@ are transferred to managed machines automatically.
 %install
 %{__python} setup.py install --root=$RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/etc/ansible/
+mkdir -p $RPM_BUILD_ROOT/etc/ansible/roles/
 cp examples/hosts $RPM_BUILD_ROOT/etc/ansible/
 cp examples/ansible.cfg $RPM_BUILD_ROOT/etc/ansible/
 mkdir -p $RPM_BUILD_ROOT/%{_mandir}/man1
 cp -v docs/man/man1/*.1 $RPM_BUILD_ROOT/%{_mandir}/man1/
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/ansible
+mkdir -p $RPM_BUILD_ROOT/%{_datadir}/ansible_plugins/{action,callback,connection,lookup,vars,filter}_plugins
+
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -94,11 +97,15 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/ansible*
 %{_bindir}/ansible*
 %{_datadir}/ansible
+%{_datadir}/ansible_plugins
 %config(noreplace) %{_sysconfdir}/ansible
 %doc README.md PKG-INFO COPYING
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Wed Dec 17 2014 Michael Scherer <misc@zarb.org> 1.8.2-2
+- precreate /etc/ansible/roles and /usr/share/ansible_plugins
+
 * Sun Dec 07 2014 Kevin Fenzi <kevin@scrye.com> 1.8.2-1
 - Update to 1.8.2
 
