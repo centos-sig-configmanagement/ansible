@@ -10,7 +10,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
 Version: 1.8.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 Group: Development/Libraries
 License: GPLv3
@@ -18,6 +18,8 @@ Source0: http://releases.ansible.com/ansible/%{name}-%{version}.tar.gz
 # Patch to make ansible-vault use the forward-compat python-crypto2.6 package
 # Upstreamed here: https://github.com/ansible/ansible/pull/6498
 Patch0: 0001-Use-setuptools-to-get-a-recent-enough-version-of-pyt.patch
+# Work around for a bug in python2.6's json library by preferring simplejson
+Patch1: ansible-use-simplejson.patch
 Url: http://ansible.com
 
 BuildArch: noarch
@@ -48,6 +50,9 @@ Requires: python-setuptools
 # make use of this forward compat package (see the patch for ansible-vault
 # above to see what needs to be done.)
 Requires: python-crypto2.6
+# The python-2.6 stdlib json module has a bug that affects the ansible
+# to_nice_json filter
+Requires: python-simplejson
 %endif
 
 # 
@@ -72,6 +77,8 @@ are transferred to managed machines automatically.
 %if 0%{?rhel} == 6
 # Patch to make ansible-vault use a newer pycrypto forward-compat package
 %patch0 -p1
+# Use simplejson to work around a bug in python2.6
+%patch1 -p1
 %endif
 
 %build
@@ -103,6 +110,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Sun Jan 11 2015 Toshio Kuratomi <toshio@fedoraproject.org> - 1.8.2-3
+- Work around a bug in python2.6 by using simplejson (applies in EPEL6)
+
 * Wed Dec 17 2014 Michael Scherer <misc@zarb.org> 1.8.2-2
 - precreate /etc/ansible/roles and /usr/share/ansible_plugins
 
