@@ -10,16 +10,11 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
 Version: 1.9.0.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 Group: Development/Libraries
 License: GPLv3
 Source0: http://releases.ansible.com/ansible/%{name}-%{version}.tar.gz
-# Patch to make ansible-vault use the forward-compat python-crypto2.6 package
-# Upstreamed here: https://github.com/ansible/ansible/pull/6498
-Patch0: 0001-Use-setuptools-to-get-a-recent-enough-version-of-pyt.patch
-# Work around for a bug in python2.6's json library by preferring simplejson
-Patch1: ansible-use-simplejson.patch
 Url: http://ansible.com
 
 BuildArch: noarch
@@ -74,13 +69,6 @@ are transferred to managed machines automatically.
 %prep
 %setup -q
 
-%if 0%{?rhel} == 6
-# Patch to make ansible-vault use a newer pycrypto forward-compat package
-%patch0 -p1
-# Use simplejson to work around a bug in python2.6
-%patch1 -p1
-%endif
-
 %build
 %{__python} setup.py build
 
@@ -110,6 +98,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Wed Mar 25 2015 Kevin Fenzi <kevin@scrye.com> 1.9.0.1-2
+- Drop upstreamed epel6 patches. 
+
 * Wed Mar 25 2015 Kevin Fenzi <kevin@scrye.com> 1.9.0.1-1
 - Update to 1.9.0.1
 
