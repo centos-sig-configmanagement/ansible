@@ -10,11 +10,14 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
 Version: 1.9.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 Group: Development/Libraries
 License: GPLv3
 Source0: http://releases.ansible.com/ansible/%{name}-%{version}.tar.gz
+# The dnf module needs a rewrite.  This is upstream's bandaid until that
+# happens (patch applied upstream)
+Patch0: dnf-bandaid.patch
 Url: http://ansible.com
 
 BuildArch: noarch
@@ -69,6 +72,9 @@ are transferred to managed machines automatically.
 %prep
 %setup -q
 
+# Fix for dnf module
+%patch0 -p1
+
 %build
 %{__python} setup.py build
 
@@ -98,6 +104,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Wed May 27 2015 Toshio Kuratomi <toshio@fedoraproject.org> - 1.9.1-2
+- Fix for dnf
+
 * Tue Apr 28 2015 Kevin Fenzi <kevin@scrye.com> 1.9.1-1
 - Update to 1.9.1
 
