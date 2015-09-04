@@ -9,13 +9,18 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 1.9.2
+Version: 1.9.3
 Release: 1%{?dist}
 
 Group: Development/Libraries
 License: GPLv3
 Source0: http://releases.ansible.com/ansible/%{name}-%{version}.tar.gz
 Url: http://ansible.com
+#
+# Patch to detect dnf as package manager. 
+# already upstream with https://github.com/opoplawski/ansible/commit/f624ec4cb8771736ffbe3fe81b2949edda159863
+# https://bugzilla.redhat.com/show_bug.cgi?id=1258080
+Patch0: ansible-1.9.3-dnf.patch
 
 BuildArch: noarch
 %if 0%{?rhel} && 0%{?rhel} <= 5
@@ -36,6 +41,7 @@ Requires: python-jinja2
 Requires: python-keyczar
 Requires: python-httplib2
 Requires: python-setuptools
+Requires: sshpass
 %endif
 
 %if 0%{?rhel} == 6
@@ -69,6 +75,8 @@ are transferred to managed machines automatically.
 %prep
 %setup -q
 
+%patch0 -p1
+
 %build
 %{__python} setup.py build
 
@@ -98,6 +106,12 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Thu Sep 03 2015 Kevin Fenzi <kevin@scrye.com> 1.9.3-1
+- Update to 1.9.3
+- Patch dnf as package manager. Fixes bug #1258080
+- Fixes bug #1251392 (in 1.9.3 release)
+- Add requires for sshpass package. Fixes bug #1258799
+
 * Thu Jun 25 2015 Kevin Fenzi <kevin@scrye.com> 1.9.2-1
 - Update to 1.9.2
 
