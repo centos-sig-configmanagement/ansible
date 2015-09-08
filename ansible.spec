@@ -10,10 +10,10 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
 Version: 1.9.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 Group: Development/Libraries
-License: GPLv3
+License: GPLv3+
 Source0: http://releases.ansible.com/ansible/%{name}-%{version}.tar.gz
 Url: http://ansible.com
 #
@@ -21,6 +21,8 @@ Url: http://ansible.com
 # already upstream with https://github.com/opoplawski/ansible/commit/f624ec4cb8771736ffbe3fe81b2949edda159863
 # https://bugzilla.redhat.com/show_bug.cgi?id=1258080
 Patch0: ansible-1.9.3-dnf.patch
+# Upstream, will be in 1.9.4
+Patch1: ansible-1.9.3-yum-return-val.patch
 
 BuildArch: noarch
 %if 0%{?rhel} && 0%{?rhel} <= 5
@@ -76,6 +78,7 @@ are transferred to managed machines automatically.
 %setup -q
 
 %patch0 -p1
+%patch1 -p1
 
 %build
 %{__python} setup.py build
@@ -106,6 +109,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Tue Sep  8 2015 Toshio Kuratomi <toshio@fedoraproject.org> - 1.9.3-2
+- Pull in patch for yum module that fixes state=latest issue
+
 * Thu Sep 03 2015 Kevin Fenzi <kevin@scrye.com> 1.9.3-1
 - Update to 1.9.3
 - Patch dnf as package manager. Fixes bug #1258080
