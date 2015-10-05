@@ -10,7 +10,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
 Version: 1.9.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 Group: Development/Libraries
 License: GPLv3+
@@ -23,6 +23,8 @@ Url: http://ansible.com
 Patch0: ansible-1.9.3-dnf.patch
 # Upstream, will be in 1.9.4
 Patch1: ansible-1.9.3-yum-return-val.patch
+# Backport of the master branch dnf module. 
+Patch2: ansible-dnf-backport.patch
 
 BuildArch: noarch
 %if 0%{?rhel} && 0%{?rhel} <= 5
@@ -79,6 +81,7 @@ are transferred to managed machines automatically.
 
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 %{__python} setup.py build
@@ -109,6 +112,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Sun Oct 04 2015 Kevin Fenzi <kevin@scrye.com> 1.9.3-3
+- Backport dnf module from head. Fixes bug #1267018
+
 * Tue Sep  8 2015 Toshio Kuratomi <toshio@fedoraproject.org> - 1.9.3-2
 - Pull in patch for yum module that fixes state=latest issue
 
