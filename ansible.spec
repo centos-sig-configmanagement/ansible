@@ -9,8 +9,8 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 1.9.3
-Release: 3%{?dist}
+Version: 1.9.4
+Release: 1%{?dist}
 
 Group: Development/Libraries
 License: GPLv3+
@@ -21,8 +21,6 @@ Url: http://ansible.com
 # already upstream with https://github.com/opoplawski/ansible/commit/f624ec4cb8771736ffbe3fe81b2949edda159863
 # https://bugzilla.redhat.com/show_bug.cgi?id=1258080
 Patch0: ansible-1.9.3-dnf.patch
-# Upstream, will be in 1.9.4
-Patch1: ansible-1.9.3-yum-return-val.patch
 # Backport of the master branch dnf module. 
 Patch2: ansible-dnf-backport.patch
 
@@ -80,7 +78,6 @@ are transferred to managed machines automatically.
 %setup -q
 
 %patch0 -p1
-%patch1 -p1
 %patch2 -p1
 
 %build
@@ -112,6 +109,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Fri Oct 09 2015 Kevin Fenzi <kevin@scrye.com> 1.9.4-1
+- Update to 1.9.4
+
 * Sun Oct 04 2015 Kevin Fenzi <kevin@scrye.com> 1.9.3-3
 - Backport dnf module from head. Fixes bug #1267018
 
