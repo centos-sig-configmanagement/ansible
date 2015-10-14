@@ -10,7 +10,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
 Version: 1.9.4
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 Group: Development/Libraries
 License: GPLv3+
@@ -23,6 +23,9 @@ Url: http://ansible.com
 Patch0: ansible-1.9.3-dnf.patch
 # Backport of the master branch dnf module. 
 Patch2: ansible-dnf-backport.patch
+# Backport fix for #2043, crash when pulling Docker images:
+# https://github.com/ansible/ansible-modules-core/commit/64b8596250e58a55eee8f2d4323d35ca32a8cd53
+Patch3: 0001-fix-2043-strip-empty-dict-from-end-of-pull-stream.patch
 
 BuildArch: noarch
 %if 0%{?rhel} && 0%{?rhel} <= 5
@@ -79,6 +82,7 @@ are transferred to managed machines automatically.
 
 %patch0 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 %{__python} setup.py build
@@ -109,6 +113,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Wed Oct 14 2015 Adam Williamson <awilliam@redhat.com> - 1.9.4-2
+- backport upstream fix for GH #2043 (crash when pulling Docker images)
+
 * Fri Oct 09 2015 Kevin Fenzi <kevin@scrye.com> 1.9.4-1
 - Update to 1.9.4
 

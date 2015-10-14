@@ -1,0 +1,41 @@
+From 64b8596250e58a55eee8f2d4323d35ca32a8cd53 Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Tue, 13 Oct 2015 22:33:46 -0700
+Subject: [PATCH] fix #2043: strip empty dict from end of 'pull' stream
+
+When pulling an image using Docker 1.8, it seems the output
+JSON stream has an empty dict at the very end. This causes
+ansible to fail when pulling an image, as it's expecting a
+status message in that dict which it uses to determine whether
+it had to download the image or not. As a bit of an ugly hack
+for that which remains backward compatible, try the last item
+in the stream, and if it's an empty dict, take the last-but-one
+item instead.
+
+The strip() is needed as the exact value appears to be '{}/r/n';
+we could just match that, but it seems like the kind of thing
+where maybe it'd happen to just be '{}/n' or '{}' or something
+in some cases, so let's just use strip() in case.
+---
+ ansible/lib/ansible/modules/cloud/docker/docker.py | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git ansible.orig/lib/ansible/modules/core/cloud/docker/docker.py ansible/lib/ansible/modules/core/cloud/docker/docker.py
+index 4df808f..cc22632 100644
+--- ansible/lib/ansible/modules/core/cloud/docker/docker.py
++++ ansible/lib/ansible/modules/core/cloud/docker/docker.py
+@@ -1392,6 +1392,11 @@ class DockerManager(object):
+             changes = list(self.client.pull(image, tag=tag, stream=True, **extra_params))
+             try:
+                 last = changes[-1]
++                # seems Docker 1.8 puts an empty dict at the end of the
++                # stream; catch that and get the previous instead
++                # https://github.com/ansible/ansible-modules-core/issues/2043
++                if last.strip() == '{}':
++                    last = changes[-2]
+             except IndexError:
+                 last = '{}'
+             status = json.loads(last).get('status', '')
+-- 
+2.5.0
+
