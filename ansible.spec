@@ -9,25 +9,20 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 1.9.4
-Release: 2%{?dist}
+Version: 2.0.0.1
+Release: 1%{?dist}
 
 Group: Development/Libraries
 License: GPLv3+
 Source0: http://releases.ansible.com/ansible/%{name}-%{version}.tar.gz
+# Use get-unittests.sh tags/v2.0.0-0.6.rc1 to retrieve the unittests
+# (Replace the tags/ parameter with the tag or hash that you want to sync with)
+Source1: ansible-unittests.tar.xz
+Source100: get-unittests.sh
+# I think this was left out of the tarballs by mistake
 Url: http://ansible.com
-#
-# Patch to detect dnf as package manager. 
-# already upstream with https://github.com/opoplawski/ansible/commit/f624ec4cb8771736ffbe3fe81b2949edda159863
-# https://bugzilla.redhat.com/show_bug.cgi?id=1258080
-Patch0: ansible-1.9.3-dnf.patch
-# Backport of the master branch dnf module. 
-Patch2: ansible-dnf-backport.patch
-# Backport fix for #2043, crash when pulling Docker images:
-# https://github.com/ansible/ansible-modules-core/commit/64b8596250e58a55eee8f2d4323d35ca32a8cd53
-Patch3: 0001-fix-2043-strip-empty-dict-from-end-of-pull-stream.patch
-
 BuildArch: noarch
+
 %if 0%{?rhel} && 0%{?rhel} <= 5
 BuildRequires: python26-devel
 
@@ -40,12 +35,33 @@ Requires: python26-httplib2
 BuildRequires: python2-devel
 BuildRequires: python-setuptools
 
+# For tests
+BuildRequires: PyYAML
+BuildRequires: python-paramiko
+BuildRequires: python-jinja2
+BuildRequires: python-keyczar
+BuildRequires: python-httplib2
+BuildRequires: python-setuptools
+BuildRequires: python-six
+BuildRequires: python-nose
+BuildRequires: python-coverage
+BuildRequires: python-mock
+
+%if (0%{?rhel} && 0%{?rhel} <= 6)
+# Distros with python < 2.7.0
+BuildRequires: python-unittest2
+# Warning: Following is not suitable for EPEL proper.  See the %%check section
+# for a full explanation
+BuildRequires: python-pip
+%endif
+
 Requires: PyYAML
 Requires: python-paramiko
 Requires: python-jinja2
 Requires: python-keyczar
 Requires: python-httplib2
 Requires: python-setuptools
+Requires: python-six
 Requires: sshpass
 %endif
 
@@ -59,6 +75,10 @@ Requires: python-crypto2.6
 # The python-2.6 stdlib json module has a bug that affects the ansible
 # to_nice_json filter
 Requires: python-simplejson
+
+# For testing
+BuildRequires: python-crypto2.6
+BuildRequires: python-simplejson
 %endif
 
 # 
@@ -80,9 +100,8 @@ are transferred to managed machines automatically.
 %prep
 %setup -q
 
-%patch0 -p1
-%patch2 -p1
-%patch3 -p1
+# Unittests
+tar -xJvf %{SOURCE1}
 
 %build
 %{__python} setup.py build
@@ -98,6 +117,10 @@ cp -v docs/man/man1/*.1 $RPM_BUILD_ROOT/%{_mandir}/man1/
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/ansible
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/ansible_plugins/{action,callback,connection,lookup,vars,filter}_plugins
 
+# RHEL <= 6 doesn't have a new enough python-mock to run the tests
+%if 0%{?fedora} || 0%{?rhel} >= 7
+make tests
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -106,13 +129,16 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %{python_sitelib}/ansible*
 %{_bindir}/ansible*
-%{_datadir}/ansible
-%{_datadir}/ansible_plugins
-%config(noreplace) %{_sysconfdir}/ansible
-%doc README.md PKG-INFO COPYING
+%config(noreplace) %{_sysconfdir}/ansible/
+%doc README.md PKG-INFO COPYING CHANGELOG.md
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Tue Jan 12 2016 Toshio Kuratomi <toshio@fedoraproject.org> - 2.0.0.1-1
+- Ansible 2.0.0.1 from upstream.  Rewrite with many bugfixes, rewritten code,
+  and new features. See the upstream changelog for details:
+  https://github.com/ansible/ansible/blob/devel/CHANGELOG.md
+
 * Wed Oct 14 2015 Adam Williamson <awilliam@redhat.com> - 1.9.4-2
 - backport upstream fix for GH #2043 (crash when pulling Docker images)
 
