@@ -9,7 +9,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 2.0.0.1
+Version: 2.0.0.2
 Release: 1%{?dist}
 
 Group: Development/Libraries
@@ -134,6 +134,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Thu Jan 14 2016 Toshio Kuratomi <toshio@fedoraproject.org> - - 2.0.0.2-1
+- Ansible 2.0.0.2 release from upstream.  (Minor bugfix to one callback plugin
+  API).
+
 * Tue Jan 12 2016 Toshio Kuratomi <toshio@fedoraproject.org> - 2.0.0.1-1
 - Ansible 2.0.0.1 from upstream.  Rewrite with many bugfixes, rewritten code,
   and new features. See the upstream changelog for details:
