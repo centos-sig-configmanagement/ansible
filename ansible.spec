@@ -10,7 +10,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
 Version: 2.0.0.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 Group: Development/Libraries
 License: GPLv3+
@@ -19,7 +19,11 @@ Source0: http://releases.ansible.com/ansible/%{name}-%{version}.tar.gz
 # (Replace the tags/ parameter with the tag or hash that you want to sync with)
 Source1: ansible-unittests.tar.xz
 Source100: get-unittests.sh
-# I think this was left out of the tarballs by mistake
+# Patch to utilize a newer jinja2 package on epel6
+# Non-upstreamable as it creates a dependency on a specific version of jinja.
+# This is desirable for us as we have packages for that version but not for
+# upstream as they don't know what their customers are running.
+Patch100: ansible-newer-jinja.patch
 Url: http://ansible.com
 BuildArch: noarch
 
@@ -31,14 +35,15 @@ Requires: python26-paramiko
 Requires: python26-jinja2
 Requires: python26-keyczar
 Requires: python26-httplib2
+
 %else
+
 BuildRequires: python2-devel
 BuildRequires: python-setuptools
 
 # For tests
 BuildRequires: PyYAML
 BuildRequires: python-paramiko
-BuildRequires: python-jinja2
 BuildRequires: python-keyczar
 BuildRequires: python-httplib2
 BuildRequires: python-setuptools
@@ -48,16 +53,21 @@ BuildRequires: python-coverage
 BuildRequires: python-mock
 
 %if (0%{?rhel} && 0%{?rhel} <= 6)
+# Ansible will work with the jinja2 shipped with RHEL6 but users can gain
+# additional jinja features by using the newer version
+Requires: python-jinja2-26
+BuildRequires: python-jinja2-26
+
 # Distros with python < 2.7.0
 BuildRequires: python-unittest2
-# Warning: Following is not suitable for EPEL proper.  See the %%check section
-# for a full explanation
-BuildRequires: python-pip
+
+%else
+Requires: python-jinja2
+BuildRequires: python-jinja2
 %endif
 
 Requires: PyYAML
 Requires: python-paramiko
-Requires: python-jinja2
 Requires: python-keyczar
 Requires: python-httplib2
 Requires: python-setuptools
@@ -100,6 +110,10 @@ are transferred to managed machines automatically.
 %prep
 %setup -q
 
+%if 0%{?rhel} == 6
+%patch100 -p1
+%endif
+
 # Unittests
 tar -xJvf %{SOURCE1}
 
@@ -117,6 +131,7 @@ cp -v docs/man/man1/*.1 $RPM_BUILD_ROOT/%{_mandir}/man1/
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/ansible
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/ansible_plugins/{action,callback,connection,lookup,vars,filter}_plugins
 
+%check
 # RHEL <= 6 doesn't have a new enough python-mock to run the tests
 %if 0%{?fedora} || 0%{?rhel} >= 7
 make tests
@@ -134,6 +149,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Thu Feb  4 2016 Toshio Kuratomi <toshio@fedoraproject.org> - - 2.0.0.2-3
+- Utilize the python-jinja26 package on EPEL6
+
 * Wed Feb 03 2016 Fedora Release Engineering <releng@fedoraproject.org> - 2.0.0.2-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
