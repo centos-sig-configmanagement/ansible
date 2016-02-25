@@ -23,7 +23,7 @@ Source1: ansible-unittests-%{version}.tar.xz
 Source100: get-unittests.sh
 
 # Patch control_path in the example config file to use %C so that it is shorter.
-# Helps with path's that exceed the system length.
+# Helps with paths that exceed the system length.
 # Upstream issue: https://github.com/ansible/ansible/issues/11536
 Patch0: ansible-2.0.1.0-control_path.patch
 # Patch to utilize a newer jinja2 package on epel6
@@ -117,6 +117,12 @@ are transferred to managed machines automatically.
 
 %prep
 %setup -q
+
+# RHEL7 doesn't have a recent enough ssh client to use this patch (needs to
+# support %C in ControlPath).  So only apply it on Fedora.
+%if 0%{?fedora}
+%patch0 -p1
+%endif
 
 %if 0%{?rhel} == 6
 %patch100 -p1
