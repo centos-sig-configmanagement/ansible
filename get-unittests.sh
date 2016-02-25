@@ -1,5 +1,8 @@
 #!/bin/sh
 
+VERSION="$1"
+TAG="$2"
+
 if test -d ansible-temp ; then
   pushd ansible-temp
   git checkout devel
@@ -10,8 +13,8 @@ else
 fi
 
 pushd ansible-temp
-if test -n "$1" ; then
-  git checkout "$1"
+if test -n "$TAG" ; then
+  git checkout "$TAG"
 fi
 popd
-tar -cJvf ansible-unittests.tar.xz -C ansible-temp/ test/units
+tar -cJvf "ansible-unittests-$VERSION.tar.xz" -C ansible-temp/ test/units
