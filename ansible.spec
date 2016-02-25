@@ -9,8 +9,8 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 2.0.0.2
-Release: 3%{?dist}
+Version: 2.0.1.0
+Release: 1%{?dist}
 
 Group: Development/Libraries
 License: GPLv3+
@@ -149,6 +149,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Thu Feb 25 2016 Toshio Kuratomi <toshio@fedoraproject.org> - 2.0.1.0-1
+- Update to upstream bugfix for 2.0.x release series.
+
 * Thu Feb  4 2016 Toshio Kuratomi <toshio@fedoraproject.org> - - 2.0.0.2-3
 - Utilize the python-jinja26 package on EPEL6
 
