@@ -9,8 +9,8 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 2.0.1.0
-Release: 2%{?dist}
+Version: 2.0.2.0
+Release: 1%{?dist}
 
 Group: Development/Libraries
 License: GPLv3+
@@ -25,7 +25,8 @@ Source100: get-unittests.sh
 # Patch control_path in the example config file to use %C so that it is shorter.
 # Helps with paths that exceed the system length.
 # Upstream issue: https://github.com/ansible/ansible/issues/11536
-Patch0: ansible-2.0.1.0-control_path.patch
+Patch0: ansible-2.0.2.0-control_path.patch
+
 # Patch to utilize a newer jinja2 package on epel6
 # Non-upstreamable as it creates a dependency on a specific version of jinja.
 # This is desirable for us as we have packages for that version but not for
@@ -163,6 +164,11 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Tue Apr 19 2016 Kevin Fenzi <kevin@scrye.com> - 2.0.2.0-1
+- Update to 2.0.2.0. https://github.com/ansible/ansible/blob/stable-2.0/CHANGELOG.md
+- Fixes CVE-2016-3096
+- Fix for failed to resolve remote temporary directory issue. bug #1328359
+
 * Thu Feb 25 2016 Toshio Kuratomi <toshio@fedoraproject.org> - 2.0.1.0-2
 - Patch control_path to be not hit path length limitations (RH BZ #1311729)
 - Version the test tarball

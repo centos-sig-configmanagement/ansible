@@ -1,6 +1,6 @@
-diff -up ansible-2.0.1.0/examples/ansible.cfg.bak ansible-2.0.1.0/examples/ansible.cfg
---- ansible-2.0.1.0/examples/ansible.cfg.bak	2016-02-25 10:56:08.511893227 -0800
-+++ ansible-2.0.1.0/examples/ansible.cfg	2016-02-25 10:57:43.628994138 -0800
+diff -Nur ansible-2.0.2.0.orig/examples/ansible.cfg ansible-2.0.2.0/examples/ansible.cfg
+--- ansible-2.0.2.0.orig/examples/ansible.cfg	2016-04-19 15:55:21.000000000 -0600
++++ ansible-2.0.2.0/examples/ansible.cfg	2016-04-19 17:33:07.274148584 -0600
 @@ -222,6 +222,7 @@
  # Example: 
  # control_path = %(directory)s/%%h-%%r
