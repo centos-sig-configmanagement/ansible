@@ -9,14 +9,14 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 2.0.2.0
+Version: 2.1.0.0
 Release: 1%{?dist}
 
 Group: Development/Libraries
 License: GPLv3+
 Source0: http://releases.ansible.com/ansible/%{name}-%{version}.tar.gz
 # To retrieve the unittests, run:
-#   ./get-unittests.sh 2.0.1.0 v2.0.1.0-1
+#   ./get-unittests.sh 2.1.0.0 v2.1.0.0-1
 # Replace the first parameter with the version you want in the tarball name
 # Replace the second parameter with the git tag or hash that you want to sync with
 Source1: ansible-unittests-%{version}.tar.xz
@@ -25,7 +25,7 @@ Source100: get-unittests.sh
 # Patch control_path in the example config file to use %C so that it is shorter.
 # Helps with paths that exceed the system length.
 # Upstream issue: https://github.com/ansible/ansible/issues/11536
-Patch0: ansible-2.0.2.0-control_path.patch
+Patch0: ansible-2.1.0.0-control_path.patch
 
 # Patch to utilize a newer jinja2 package on epel6
 # Non-upstreamable as it creates a dependency on a specific version of jinja.
@@ -164,6 +164,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Wed May 25 2016 Kevin Fenzi <kevin@scrye.com> - 2.1.0.0-1
+- Update to 2.1.0.0.
+- Fixes: 1334097 1337474 1332233 1336266
+
 * Tue Apr 19 2016 Kevin Fenzi <kevin@scrye.com> - 2.0.2.0-1
 - Update to 2.0.2.0. https://github.com/ansible/ansible/blob/stable-2.0/CHANGELOG.md
 - Fixes CVE-2016-3096

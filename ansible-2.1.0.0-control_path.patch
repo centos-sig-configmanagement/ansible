@@ -1,0 +1,11 @@
+diff -Nur ansible-2.1.0.0.orig/examples/ansible.cfg ansible-2.1.0.0/examples/ansible.cfg
+--- ansible-2.1.0.0.orig/examples/ansible.cfg	2016-05-25 07:00:55.000000000 -0600
++++ ansible-2.1.0.0/examples/ansible.cfg	2016-05-25 08:58:31.768143613 -0600
+@@ -286,6 +286,7 @@
+ # Example:
+ # control_path = %(directory)s/%%h-%%r
+ #control_path = %(directory)s/ansible-ssh-%%h-%%p-%%r
++control_path = %(directory)s/ansible-ssh-%%C
+ 
+ # Enabling pipelining reduces the number of SSH operations required to
+ # execute a module on the remote server. This can result in a significant
