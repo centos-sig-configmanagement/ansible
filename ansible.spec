@@ -1,16 +1,20 @@
-%if 0%{?rhel} == 5
-%define __python /usr/bin/python26
+# RHEL 6 didn't have a __python2 macro.
+# Amazon Linux 2015.9 is based on RHEL6, with /usr/bin/python2 -> python2.6, while
+# /usr/bin/python -> python2.7.  Explicitly use python2.6.
+%if 0%{?rhel} == 6 || 0%{?rhel} == 5
+%global __python2 /usr/bin/python2.6
 %endif
 
 %if 0%{?rhel} <= 5
-%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 %endif
+
+%{!?python_sitelib: %global python_sitelib %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
 Version: 2.1.0.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 Group: Development/Libraries
 License: GPLv3+
@@ -133,10 +137,10 @@ are transferred to managed machines automatically.
 tar -xJvf %{SOURCE1}
 
 %build
-%{__python} setup.py build
+%{__python2} setup.py build
 
 %install
-%{__python} setup.py install --root=$RPM_BUILD_ROOT
+%{__python2} setup.py install --root=$RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/etc/ansible/
 mkdir -p $RPM_BUILD_ROOT/etc/ansible/roles/
 cp examples/hosts $RPM_BUILD_ROOT/etc/ansible/
@@ -164,6 +168,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Wed Jun 15 2016 Matt Domsch <matt@domsch.com> - 2.1.0.0-2
+- Force python 2.6 on EL6
+
 * Wed May 25 2016 Kevin Fenzi <kevin@scrye.com> - 2.1.0.0-1
 - Update to 2.1.0.0.
 - Fixes: 1334097 1337474 1332233 1336266
