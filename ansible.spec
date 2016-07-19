@@ -14,7 +14,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
 Version: 2.1.0.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 Group: Development/Libraries
 License: GPLv3+
@@ -168,6 +168,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.1.0.0-3
+- https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
+
 * Wed Jun 15 2016 Matt Domsch <matt@domsch.com> - 2.1.0.0-2
 - Force python 2.6 on EL6
 
