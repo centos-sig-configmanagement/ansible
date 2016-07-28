@@ -13,14 +13,14 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 2.1.0.0
-Release: 3%{?dist}
+Version: 2.1.1.0
+Release: 1%{?dist}
 
 Group: Development/Libraries
 License: GPLv3+
 Source0: http://releases.ansible.com/ansible/%{name}-%{version}.tar.gz
 # To retrieve the unittests, run:
-#   ./get-unittests.sh 2.1.0.0 v2.1.0.0-1
+#   ./get-unittests.sh 2.1.1.0 v2.1.1.0-1
 # Replace the first parameter with the version you want in the tarball name
 # Replace the second parameter with the git tag or hash that you want to sync with
 Source1: ansible-unittests-%{version}.tar.xz
@@ -168,6 +168,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Thu Jul 28 2016 Kevin Fenzi <kevin@scrye.com> - 2.1.1.0-1
+- Update to 2.1.1
+
 * Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.1.0.0-3
 - https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
 
