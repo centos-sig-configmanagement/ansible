@@ -13,7 +13,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
-Version: 2.1.2.0
+Version: 2.2.0.0
 Release: 1%{?dist}
 
 Group: Development/Libraries
@@ -64,6 +64,10 @@ BuildRequires: python-six
 BuildRequires: python-nose
 BuildRequires: python-coverage
 BuildRequires: python-mock
+BuildRequires: python2-boto3
+BuildRequires: python2-botocore
+BuildRequires: docker
+BuildRequires: python-passlib
 
 %if (0%{?rhel} && 0%{?rhel} <= 6)
 # Ansible will work with the jinja2 shipped with RHEL6 but users can gain
@@ -168,6 +172,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Tue Nov 01 2016 Kevin Fenzi <kevin@scrye.com> - 2.2.0.0-1
+- Update to 2.2.0. Fixes #1390564 #1388531 #1387621 #1381538 #1388113 #1390646 #1388038 #1390650
+- Fixes for CVE-2016-8628 CVE-2016-8614 CVE-2016-8628 CVE-2016-8614
+
 * Thu Sep 29 2016 Kevin Fenzi <kevin@scrye.com> - 2.1.2.0-1
 - Update to 2.1.2
 
