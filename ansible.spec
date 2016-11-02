@@ -14,7 +14,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
 Version: 2.2.0.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 Group: Development/Libraries
 License: GPLv3+
@@ -30,6 +30,14 @@ Source100: get-unittests.sh
 # Helps with paths that exceed the system length.
 # Upstream issue: https://github.com/ansible/ansible/issues/11536
 Patch0: ansible-2.1.0.0-control_path.patch
+
+#
+# fix issue with openssl and python-cryptography that breaks tests
+# If python-cryptography is pulled in and openssl is 1.0.x one of the tests will
+# leave things in an error state due to no network access in koji and cause a later
+# test to completely fail due to this.
+#
+Patch1: https://patch-diff.githubusercontent.com/raw/ansible/ansible/pull/18296.patch
 
 # Patch to utilize a newer jinja2 package on epel6
 # Non-upstreamable as it creates a dependency on a specific version of jinja.
@@ -55,6 +63,8 @@ BuildRequires: python2-devel
 BuildRequires: python-setuptools
 
 # For tests
+# We don't run tests on epel6, so don't bother pulling these in there.
+%if (0%{?fedora} ||  0%{?rhel} > 6)
 BuildRequires: PyYAML
 BuildRequires: python-paramiko
 BuildRequires: python-keyczar
@@ -64,10 +74,11 @@ BuildRequires: python-six
 BuildRequires: python-nose
 BuildRequires: python-coverage
 BuildRequires: python-mock
-BuildRequires: python2-boto3
-BuildRequires: python2-botocore
+BuildRequires: python-boto3
+BuildRequires: python-botocore
 BuildRequires: docker
 BuildRequires: python-passlib
+%endif
 
 %if (0%{?rhel} && 0%{?rhel} <= 6)
 # Ansible will work with the jinja2 shipped with RHEL6 but users can gain
@@ -133,6 +144,8 @@ are transferred to managed machines automatically.
 %patch0 -p1
 %endif
 
+%patch1 -p1
+
 %if 0%{?rhel} == 6
 %patch100 -p1
 %endif
@@ -172,6 +185,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Tue Nov 01 2016 Kevin Fenzi <kevin@scrye.com> - 2.2.0.0-2
+- Fix some BuildRequires to work on all branches.
+
 * Tue Nov 01 2016 Kevin Fenzi <kevin@scrye.com> - 2.2.0.0-1
 - Update to 2.2.0. Fixes #1390564 #1388531 #1387621 #1381538 #1388113 #1390646 #1388038 #1390650
 - Fixes for CVE-2016-8628 CVE-2016-8614 CVE-2016-8628 CVE-2016-8614

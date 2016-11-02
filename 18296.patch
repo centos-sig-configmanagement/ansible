@@ -1,0 +1,108 @@
+From 96541c0e3f55b233ac9eaf8710235fa40057f977 Mon Sep 17 00:00:00 2001
+From: Patrick Uiterwijk <puiterwijk@redhat.com>
+Date: Wed, 2 Nov 2016 01:59:25 +0000
+Subject: [PATCH] Fix adding the same trusted certificates multiple times
+
+If there is an intermittent network failure, we might be trying to reach
+an URL multiple times. Without this patch, we would be re-adding the same
+certificate to the OpenSSL default context multiple times.
+Normally, this is no big issue, as OpenSSL will just silently ignore them,
+after registering the error in its own error stack.
+However, when python-cryptography initializes, it verifies that the current
+error stack of the default OpenSSL context is empty, which it no longer is
+due to us adding the certificates multiple times.
+This results in cryptography throwing an Unknown OpenSSL Error with details:
+
+OpenSSLErrorWithText(code=185057381L, lib=11, func=124, reason=101,
+reason_text='error:0B07C065:x509 certificate routines:X509_STORE_add_cert:cert already in hash table'),
+
+Signed-off-by: Patrick Uiterwijk <puiterwijk@redhat.com>
+---
+ lib/ansible/module_utils/urls.py | 35 ++++++++++++++++++++++++++++-------
+ 1 file changed, 28 insertions(+), 7 deletions(-)
+
+diff --git a/lib/ansible/module_utils/urls.py b/lib/ansible/module_utils/urls.py
+index bef950f..c4a13bf 100644
+--- a/lib/ansible/module_utils/urls.py
++++ b/lib/ansible/module_utils/urls.py
+@@ -182,6 +182,8 @@
+         del libssl
+ 
+ 
++LOADED_VERIFY_LOCATIONS = set()
++
+ HAS_MATCH_HOSTNAME = True
+ try:
+     from ssl import match_hostname, CertificateError
+@@ -590,6 +592,8 @@ def get_ca_certs(self):
+         paths_checked.append('/etc/ansible')
+ 
+         tmp_fd, tmp_path = tempfile.mkstemp()
++        to_add_fd, to_add_path = tempfile.mkstemp()
++        to_add = False
+ 
+         # Write the dummy ca cert if we are running on Mac OS X
+         if system == 'Darwin':
+@@ -608,13 +612,21 @@ def get_ca_certs(self):
+                     if os.path.isfile(full_path) and os.path.splitext(f)[1] in ('.crt','.pem'):
+                         try:
+                             cert_file = open(full_path, 'rb')
+-                            os.write(tmp_fd, cert_file.read())
+-                            os.write(tmp_fd, b('\n'))
++                            cert = cert_file.read()
+                             cert_file.close()
++                            os.write(tmp_fd, cert)
++                            os.write(tmp_fd, b('\n'))
++                            if full_path not in LOADED_VERIFY_LOCATIONS:
++                                to_add = True
++                                os.write(to_add_fd, cert)
++                                os.write(to_add_fd, b('\n'))
++                                LOADED_VERIFY_LOCATIONS.add(full_path)
+                         except (OSError, IOError):
+                             pass
+ 
+-        return (tmp_path, paths_checked)
++        if not to_add:
++            to_add_path = None
++        return (tmp_path, to_add_path, paths_checked)
+ 
+     def validate_proxy_response(self, response, valid_codes=[200]):
+         '''
+@@ -643,17 +655,18 @@ def detect_no_proxy(self, url):
+                     return False
+         return True
+ 
+-    def _make_context(self, tmp_ca_cert_path):
++    def _make_context(self, to_add_ca_cert_path):
+         context = create_default_context()
+-        context.load_verify_locations(tmp_ca_cert_path)
++        if to_add_ca_cert_path:
++            context.load_verify_locations(to_add_ca_cert_path)
+         return context
+ 
+     def http_request(self, req):
+-        tmp_ca_cert_path, paths_checked = self.get_ca_certs()
++        tmp_ca_cert_path, to_add_ca_cert_path, paths_checked = self.get_ca_certs()
+         https_proxy = os.environ.get('https_proxy')
+         context = None
+         if HAS_SSLCONTEXT:
+-            context = self._make_context(tmp_ca_cert_path)
++            context = self._make_context(to_add_ca_cert_path)
+ 
+         # Detect if 'no_proxy' environment variable is set and if our URL is included
+         use_proxy = self.detect_no_proxy(req.get_full_url())
+@@ -719,6 +732,14 @@ def http_request(self, req):
+         except:
+             pass
+ 
++        try:
++            # cleanup the temp file created, don't worry
++            # if it fails for some reason
++            if to_add_ca_cert_path:
++                os.remove(to_add_ca_cert_path)
++        except:
++            pass
++
+         return req
+ 
+     https_request = http_request
