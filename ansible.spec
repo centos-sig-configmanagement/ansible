@@ -14,7 +14,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
 Version: 2.2.0.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 Group: Development/Libraries
 License: GPLv3+
@@ -38,6 +38,14 @@ Patch0: ansible-2.1.0.0-control_path.patch
 # test to completely fail due to this.
 #
 Patch1: https://patch-diff.githubusercontent.com/raw/ansible/ansible/pull/18296.patch
+
+#
+# fix issue with dnf module and instaling groups
+# https://github.com/ansible/ansible-modules-extras/issues/3358
+# These two upstream commits:
+# 6eb59a4fa249ff41755d3f736734ef2752000136
+# 18bb736cc26fb6b40da25da4349ae900ed9b489b
+Patch2: ansible-2.2.0-dnf-groups.patch
 
 # Patch to utilize a newer jinja2 package on epel6
 # Non-upstreamable as it creates a dependency on a specific version of jinja.
@@ -145,6 +153,7 @@ are transferred to managed machines automatically.
 %endif
 
 %patch1 -p1
+%patch2 -p1
 
 %if 0%{?rhel} == 6
 %patch100 -p1
@@ -185,6 +194,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Fri Nov  4 2016 Toshio Kuratomi <toshio@fedoraproject.org> - - 2.2.0.0-3
+- Fix for dnf group install
+
 * Tue Nov 01 2016 Kevin Fenzi <kevin@scrye.com> - 2.2.0.0-2
 - Fix some BuildRequires to work on all branches.
 
