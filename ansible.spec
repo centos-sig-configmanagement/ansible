@@ -14,7 +14,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Name: ansible
 Summary: SSH-based configuration management, deployment, and task execution system
 Version: 2.2.0.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 
 Group: Development/Libraries
 License: GPLv3+
@@ -46,6 +46,12 @@ Patch1: https://patch-diff.githubusercontent.com/raw/ansible/ansible/pull/18296.
 # 6eb59a4fa249ff41755d3f736734ef2752000136
 # 18bb736cc26fb6b40da25da4349ae900ed9b489b
 Patch2: ansible-2.2.0-dnf-groups.patch
+
+# fix unit tests to skip tests for docker if docker is not available.
+# Already upsreamed
+# b482cdcf036e372ecde744e7e4f06610344bdc55
+# 8552ad6bf19b7b04d57c8fa7770202cb151509af
+Patch3: ansible-2.2.0.0-avoid-docker-dep.patch
 
 # Patch to utilize a newer jinja2 package on epel6
 # Non-upstreamable as it creates a dependency on a specific version of jinja.
@@ -84,7 +90,6 @@ BuildRequires: python-coverage
 BuildRequires: python-mock
 BuildRequires: python-boto3
 BuildRequires: python-botocore
-BuildRequires: docker
 BuildRequires: python-passlib
 %endif
 
@@ -161,6 +166,7 @@ are transferred to managed machines automatically.
 
 # Unittests
 tar -xJvf %{SOURCE1}
+%patch3 -p1
 
 %build
 %{__python2} setup.py build
@@ -194,6 +200,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/ansible*
 
 %changelog
+* Wed Nov 09 2016 Kevin Fenzi <kevin@scrye.com> - 2.2.0.0-3
+- Update unit tests that will skip docker related tests if docker isn't available.
+- Drop docker BuildRequires. Fixes bug #1392918
+
 * Fri Nov  4 2016 Toshio Kuratomi <toshio@fedoraproject.org> - - 2.2.0.0-3
 - Fix for dnf group install
 
